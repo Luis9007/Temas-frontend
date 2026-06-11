@@ -1,0 +1,260 @@
+// ─── Variables ──────────────────────────────────────────────────────────────
+$bg:        #0f1117;
+$surface:   #181c26;
+$border:    #252a38;
+$accent:    #4f8ef7;
+$accent-dk: #3a72d8;
+$text:      #e8eaf0;
+$muted:     #6b7280;
+$danger:    #e05252;
+$danger-dk: #c43c3c;
+$success:   #3db87a;
+$radius:    10px;
+
+// ─── Layout ─────────────────────────────────────────────────────────────────
+.page-wrapper {
+  min-height: 100vh;
+  background: $bg;
+  color: $text;
+  font-family: 'DM Sans', 'Segoe UI', sans-serif;
+  padding: 0 0 4rem;
+}
+
+// ─── Header ─────────────────────────────────────────────────────────────────
+.page-header {
+  border-bottom: 1px solid $border;
+  padding: 1.75rem 2.5rem;
+
+  .header-content {
+    max-width: 900px;
+    margin: 0 auto;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+}
+
+.title-block {
+  .label {
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: $accent;
+  }
+  h1 {
+    margin: 0.1rem 0 0;
+    font-size: 2rem;
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    color: $text;
+  }
+}
+
+// ─── Buttons ─────────────────────────────────────────────────────────────────
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.6rem 1.2rem;
+  background: $accent;
+  color: #fff;
+  border-radius: $radius;
+  font-size: 0.88rem;
+  font-weight: 600;
+  text-decoration: none;
+  border: none;
+  cursor: pointer;
+  transition: background 0.18s;
+
+  &:hover { background: $accent-dk; }
+  &.sm { font-size: 0.82rem; padding: 0.5rem 1rem; }
+}
+
+.btn-retry {
+  background: transparent;
+  border: 1px solid currentColor;
+  color: inherit;
+  padding: 0.25rem 0.75rem;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.8rem;
+  margin-left: 0.75rem;
+  transition: background 0.15s;
+  &:hover { background: rgba(255,255,255,0.08); }
+}
+
+.btn-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 7px;
+  border: 1px solid $border;
+  background: transparent;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s, color 0.15s;
+  text-decoration: none;
+  color: $muted;
+
+  &.edit:hover  { background: rgba($accent, 0.12); border-color: $accent; color: $accent; }
+  &.delete:hover { background: rgba($danger, 0.12); border-color: $danger; color: $danger; }
+}
+
+.confirm-actions {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  animation: fadeIn 0.15s ease;
+}
+
+.confirm-text {
+  font-size: 0.8rem;
+  color: $danger;
+  font-weight: 500;
+}
+
+.btn-confirm-yes {
+  padding: 0.25rem 0.65rem;
+  background: $danger;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s;
+  &:hover { background: $danger-dk; }
+}
+
+.btn-confirm-no {
+  padding: 0.25rem 0.65rem;
+  background: $border;
+  color: $muted;
+  border: none;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s;
+  &:hover { background: #2e3547; color: $text; }
+}
+
+// ─── Body ────────────────────────────────────────────────────────────────────
+.page-body {
+  max-width: 900px;
+  margin: 2rem auto;
+  padding: 0 2.5rem;
+}
+
+// ─── States ──────────────────────────────────────────────────────────────────
+.state-block {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  padding: 4rem 2rem;
+  color: $muted;
+  text-align: center;
+
+  &.empty svg { opacity: 0.3; }
+  p { margin: 0; font-size: 0.95rem; }
+}
+
+.spinner {
+  width: 36px;
+  height: 36px;
+  border: 3px solid $border;
+  border-top-color: $accent;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+
+.alert-error {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  padding: 0.9rem 1.2rem;
+  background: rgba($danger, 0.1);
+  border: 1px solid rgba($danger, 0.3);
+  border-radius: $radius;
+  color: #f87171;
+  font-size: 0.88rem;
+}
+
+// ─── Table ───────────────────────────────────────────────────────────────────
+.table-container {
+  background: $surface;
+  border: 1px solid $border;
+  border-radius: $radius;
+  overflow: hidden;
+}
+
+.table-meta {
+  padding: 0.75rem 1.25rem;
+  border-bottom: 1px solid $border;
+  font-size: 0.78rem;
+  color: $muted;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+}
+
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.88rem;
+
+  thead tr {
+    background: rgba(#fff, 0.02);
+  }
+
+  th {
+    padding: 0.7rem 1.25rem;
+    text-align: left;
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: $muted;
+    border-bottom: 1px solid $border;
+  }
+
+  tbody tr {
+    border-bottom: 1px solid $border;
+    transition: background 0.12s;
+
+    &:last-child { border-bottom: none; }
+    &:hover { background: rgba(#fff, 0.025); }
+    &.confirm-row { background: rgba($danger, 0.05); }
+  }
+
+  td {
+    padding: 0.85rem 1.25rem;
+    vertical-align: middle;
+  }
+}
+
+.col-id      { width: 70px; }
+.col-actions { width: 120px; text-align: right;
+  th { text-align: right; }
+}
+.col-name    { font-weight: 500; color: $text; }
+
+.id-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  background: $border;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: $muted;
+}
+
+// ─── Animations ──────────────────────────────────────────────────────────────
+@keyframes spin    { to { transform: rotate(360deg); } }
+@keyframes fadeIn  { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: none; } }

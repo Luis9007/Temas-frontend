@@ -1,0 +1,6 @@
+{
+  "buildCommand": "npm run build:prod",
+  "outputDirectory": "dist/temas-frontend",
+  "framework": null,
+  "installCommand": "npm install"
+}

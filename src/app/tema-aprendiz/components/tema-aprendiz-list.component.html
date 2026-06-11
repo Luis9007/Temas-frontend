@@ -1,0 +1,146 @@
+<div class="page-wrapper">
+  <header class="page-header">
+    <div class="header-content">
+      <div class="title-block">
+        <span class="label">Gestión</span>
+        <h1>Asignación de Temas</h1>
+      </div>
+    </div>
+  </header>
+
+  <main class="page-body">
+
+    <!-- Formulario de asignación -->
+    <div class="form-card assign-form">
+      <h2 class="section-title">Asignar tema a aprendiz</h2>
+
+      <div *ngIf="error" class="alert-error">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="flex-shrink:0">
+          <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
+        </svg>
+        {{ error }}
+      </div>
+
+      <div *ngIf="successMsg" class="alert-success">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="flex-shrink:0">
+          <polyline points="20 6 9 17 4 12"/>
+        </svg>
+        {{ successMsg }}
+      </div>
+
+      <div class="assign-row">
+        <div class="form-group">
+          <label>Aprendiz <span class="required">*</span></label>
+          <select [(ngModel)]="selectedAprendiz">
+            <option [ngValue]="null" disabled>Selecciona un aprendiz…</option>
+            <option *ngFor="let a of aprendices" [ngValue]="a.id">{{ a.nombre_completo }} — {{ a.cedula }}</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Tema <span class="required">*</span></label>
+          <select [(ngModel)]="selectedTema">
+            <option [ngValue]="null" disabled>Selecciona un tema…</option>
+            <option *ngFor="let t of temas" [ngValue]="t.id">{{ t.nombre_tema }}</option>
+          </select>
+        </div>
+        <button class="btn-primary assign-btn" (click)="asignar()" [disabled]="!selectedAprendiz || !selectedTema || saving">
+          <span *ngIf="!saving">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+            </svg>
+            Asignar
+          </span>
+          <span *ngIf="saving" class="saving-state"><span class="spinner-sm"></span> Asignando…</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Tabla de asignaciones -->
+    <div *ngIf="loading" class="state-block">
+      <div class="spinner"></div>
+      <p>Cargando asignaciones…</p>
+    </div>
+
+    <div *ngIf="!loading">
+      <div *ngIf="asignaciones.length === 0" class="state-block empty">
+        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2">
+          <path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/>
+        </svg>
+        <p>No hay asignaciones registradas.</p>
+      </div>
+
+      <div *ngIf="asignaciones.length > 0" class="table-container">
+        <div class="table-meta">{{ asignaciones.length }} asignación{{ asignaciones.length !== 1 ? 'es' : '' }}</div>
+
+        <!-- Tabla desktop -->
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th class="col-id">#</th>
+              <th>Aprendiz</th>
+              <th>Cédula</th>
+              <th>Tema asignado</th>
+              <th class="col-actions">Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let asignacion of asignaciones" [class.confirm-row]="deleteConfirmId === asignacion.id">
+              <td class="col-id"><span class="id-badge">{{ asignacion.id }}</span></td>
+              <td class="col-name">{{ asignacion.nombre_completo }}</td>
+              <td>{{ asignacion.cedula }}</td>
+              <td><span class="tema-chip">{{ asignacion.nombre_tema }}</span></td>
+              <td class="col-actions">
+                <ng-container *ngIf="deleteConfirmId !== asignacion.id; else confirmBlock">
+                  <button (click)="confirmDelete(asignacion.id)" class="btn-icon delete" title="Eliminar asignación">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/>
+                      <path d="M10 11v6"/><path d="M14 11v6"/>
+                    </svg>
+                  </button>
+                </ng-container>
+                <ng-template #confirmBlock>
+                  <div class="confirm-actions">
+                    <span class="confirm-text">¿Eliminar?</span>
+                    <button (click)="eliminarAsignacion(asignacion.id)" class="btn-confirm-yes">Sí</button>
+                    <button (click)="cancelDelete()" class="btn-confirm-no">No</button>
+                  </div>
+                </ng-template>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+        <!-- Cards móvil -->
+        <div class="card-list">
+          <div *ngFor="let asignacion of asignaciones" class="tema-card" [class.confirm-row]="deleteConfirmId === asignacion.id">
+            <div class="card-info">
+              <span class="id-badge">{{ asignacion.id }}</span>
+              <div class="card-details">
+                <span class="card-name">{{ asignacion.nombre_completo }}</span>
+                <span class="card-sub">{{ asignacion.cedula }}</span>
+                <span class="tema-chip sm">{{ asignacion.nombre_tema }}</span>
+              </div>
+            </div>
+            <div class="card-actions">
+              <ng-container *ngIf="deleteConfirmId !== asignacion.id; else confirmBlockCard">
+                <button (click)="confirmDelete(asignacion.id)" class="btn-icon delete">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/>
+                    <path d="M10 11v6"/><path d="M14 11v6"/>
+                  </svg>
+                </button>
+              </ng-container>
+              <ng-template #confirmBlockCard>
+                <div class="confirm-actions">
+                  <span class="confirm-text">¿Eliminar?</span>
+                  <button (click)="eliminarAsignacion(asignacion.id)" class="btn-confirm-yes">Sí</button>
+                  <button (click)="cancelDelete()" class="btn-confirm-no">No</button>
+                </div>
+              </ng-template>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
