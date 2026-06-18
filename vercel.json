@@ -1,6 +1,9 @@
 {
   "buildCommand": "npm run build:prod",
-  "outputDirectory": "dist/temas-frontend",
+  "outputDirectory": "dist/temas-frontend/browser",
   "framework": null,
-  "installCommand": "npm install"
+  "installCommand": "npm install",
+  "rewrites": [
+    { "source": "/(.*)", "destination": "/index.html" }
+  ]
 }
