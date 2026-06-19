@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
-import { Tema, CreateTemaDto, UpdateTemaDto } from '../models/tema.model';
+import { Tema, CreateTemaDto, UpdateTemaDto, TipsResponse } from '../models/tema.model';
 
 @Injectable({ providedIn: 'root' })
 export class TemasService {
@@ -28,5 +28,15 @@ export class TemasService {
 
   remove(id: string): Observable<{ message: string }> {
     return this.http.delete<{ message: string }>(`${this.apiUrl}/${id}`);
+  }
+
+  /** Obtiene (o genera) los tips de Gemini para un tema */
+  getTips(id: string): Observable<TipsResponse> {
+    return this.http.get<TipsResponse>(`${this.apiUrl}/${id}/tips`);
+  }
+
+  /** Fuerza la regeneración de los tips */
+  regenerateTips(id: string): Observable<TipsResponse> {
+    return this.http.post<TipsResponse>(`${this.apiUrl}/${id}/tips/regenerate`, {});
   }
 }

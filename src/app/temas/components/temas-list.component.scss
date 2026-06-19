@@ -1,6 +1,6 @@
 // ─── Variables ──────────────────────────────────────────────────────────────
-$bg:        #0f1117;
-$surface:   #181c26;
+$bg:        radial-gradient(ellipse at 20% 20%,rgba(99,102,241,.25) 0%,transparent 50%), radial-gradient(ellipse at 80% 80%,rgba(124,158,248,.2) 0%,transparent 50%), linear-gradient(135deg,#0d0f1a 0%,#111827 50%,#0f1520 100%);
+$surface:   rgba(124,158,248,.1);
 $border:    #252a38;
 $accent:    #4f8ef7;
 $accent-dk: #3a72d8;
@@ -9,6 +9,8 @@ $muted:     #6b7280;
 $danger:    #e05252;
 $danger-dk: #c43c3c;
 $success:   #3db87a;
+$gemini:    #8b5cf6;
+$gemini-dk: #7c3aed;
 $radius:    10px;
 
 // ─── Layout ─────────────────────────────────────────────────────────────────
@@ -26,7 +28,7 @@ $radius:    10px;
   padding: 1.75rem 2.5rem;
 
   .header-content {
-    max-width: 900px;
+    max-width: 960px;
     margin: 0 auto;
     display: flex;
     align-items: flex-end;
@@ -142,9 +144,41 @@ $radius:    10px;
   &:hover { background: #2e3547; color: $text; }
 }
 
+// ─── Tips button ─────────────────────────────────────────────────────────────
+.btn-tips {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.3rem 0.7rem;
+  border-radius: 7px;
+  border: 1px solid rgba($gemini, 0.35);
+  background: rgba($gemini, 0.07);
+  color: $gemini;
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.18s;
+  white-space: nowrap;
+
+  &:hover {
+    background: rgba($gemini, 0.18);
+    border-color: $gemini;
+  }
+
+  &.active {
+    background: rgba($gemini, 0.2);
+    border-color: $gemini;
+    color: lighten($gemini, 15%);
+  }
+
+  &.has-tips {
+    border-color: rgba($gemini, 0.5);
+  }
+}
+
 // ─── Body ────────────────────────────────────────────────────────────────────
 .page-body {
-  max-width: 900px;
+  max-width: 960px;
   margin: 2rem auto;
   padding: 0 2.5rem;
 }
@@ -168,6 +202,26 @@ $radius:    10px;
   height: 36px;
   border: 3px solid $border;
   border-top-color: $accent;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+
+.spinner-sm {
+  display: inline-block;
+  width: 18px;
+  height: 18px;
+  border: 2px solid $border;
+  border-top-color: $gemini;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+
+.spinner-xs {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  border: 2px solid rgba($gemini, 0.3);
+  border-top-color: $gemini;
   border-radius: 50%;
   animation: spin 0.7s linear infinite;
 }
@@ -226,8 +280,9 @@ $radius:    10px;
     transition: background 0.12s;
 
     &:last-child { border-bottom: none; }
-    &:hover { background: rgba(#fff, 0.025); }
+    &:hover:not(.tips-row) { background: rgba(#fff, 0.025); }
     &.confirm-row { background: rgba($danger, 0.05); }
+    &.expanded-row { background: rgba($gemini, 0.04); }
   }
 
   td {
@@ -236,11 +291,12 @@ $radius:    10px;
   }
 }
 
-.col-id      { width: 70px; }
-.col-actions { width: 120px; text-align: right;
+.col-id       { width: 70px; }
+.col-tips-btn { width: 130px; }
+.col-actions  { width: 120px; text-align: right;
   th { text-align: right; }
 }
-.col-name    { font-weight: 500; color: $text; }
+.col-name { font-weight: 500; color: $text; }
 
 .id-badge {
   display: inline-flex;
@@ -253,6 +309,117 @@ $radius:    10px;
   font-size: 0.75rem;
   font-weight: 600;
   color: $muted;
+}
+
+// ─── Tips expanded row ────────────────────────────────────────────────────────
+.tips-row {
+  background: rgba($gemini, 0.03) !important;
+
+  &:hover { background: rgba($gemini, 0.03) !important; }
+}
+
+.tips-cell {
+  padding: 1rem 1.5rem 1.25rem !important;
+  border-top: 1px dashed rgba($gemini, 0.2);
+}
+
+.tips-loading {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  color: $muted;
+  font-size: 0.85rem;
+  padding: 0.5rem 0;
+}
+
+.tips-error {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #f87171;
+  font-size: 0.82rem;
+}
+
+.tips-panel {
+  animation: fadeIn 0.2s ease;
+}
+
+.tips-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.85rem;
+}
+
+.tips-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.78rem;
+  color: rgba($gemini, 0.85);
+  font-weight: 500;
+
+  strong { color: $text; }
+}
+
+.btn-regenerate {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.25rem 0.65rem;
+  border-radius: 6px;
+  border: 1px solid rgba($gemini, 0.3);
+  background: transparent;
+  color: rgba($gemini, 0.7);
+  font-size: 0.75rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s;
+
+  &:hover {
+    background: rgba($gemini, 0.1);
+    border-color: $gemini;
+    color: $gemini;
+  }
+}
+
+.tips-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+}
+
+.tip-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  padding: 0.65rem 0.9rem;
+  background: rgba(#fff, 0.025);
+  border: 1px solid rgba($gemini, 0.12);
+  border-radius: 8px;
+  animation: fadeIn 0.2s ease;
+}
+
+.tip-number {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: rgba($gemini, 0.2);
+  color: lighten($gemini, 15%);
+  font-size: 0.72rem;
+  font-weight: 700;
+}
+
+.tip-detalle {
+  margin: 0;
+  font-size: 0.85rem;
+  color: $text;
+  line-height: 1.5;
+  opacity: 0.9;
 }
 
 // ─── Animations ──────────────────────────────────────────────────────────────
